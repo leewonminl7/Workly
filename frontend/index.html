@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workly - AI Job Matching Platform</title>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --error: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .hero {
+            padding: 5rem 0;
+            text-align: center;
+            background-color: #dbeafe;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--dark);
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .auth-form {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .auth-form h2 {
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+
+        .input-with-button {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .input-with-button .form-control {
+            flex: 1;
+        }
+
+        .input-with-button .add-btn {
+            padding: 0.75rem 1rem;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            min-height: 50px;
+        }
+
+        .chip {
+            background-color: #e0f2fe;
+            color: var(--primary-dark);
+            padding: 0.4rem 0.8rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .chip span {
+            margin-right: 0.5rem;
+        }
+
+        .chip button {
+            background: none;
+            border: none;
+            color: var(--primary-dark);
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .form-progress {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .progress-step {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--gray);
+            margin: 0 4px;
+        }
+
+        .progress-step.active {
+            background-color: var(--primary);
+        }
+
+        .work-experience-item {
+            background-color: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .experience-list {
+            margin-top: 1rem;
+            list-style: none;
+        }
+
+        .auth-links {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .auth-links a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+
+
+        .auth-links {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .auth-links a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+
+        .features {
+            padding: 4rem 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .steps {
+            padding: 4rem 0;
+            background-color: #f1f5f9;
+        }
+
+        .steps-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+        }
+
+        .step-number {
+            background-color: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            margin-right: 1.5rem;
+        }
+
+        .step-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #334155;
+            color: var(--gray);
+        }
+
+        .auth-container {
+            display: none;
+            justify-content: center;
+            align-items: stretch;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .auth-form {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: center;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo">Wor<span>kly</span></a>
+            <div class="nav-links">
+                <a href="#" class="btn btn-outline">For Employers</a>
+                <a href="#" class="btn" onclick="showSection('signup')">Sign Up</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Find Your Perfect Job Match with AI</h1>
+            <p>Workly uses advanced AI to match your skills, experience, and preferences with the perfect job
+                opportunities - including accommodations for disabilities and accessibility needs.</p>
+            <a href="#signup" class="btn" onclick="showSection('signup')">Get Started</a>
+        </section>
+
+        <section id="signup" class="auth-container" style="display: none;">
+            <div class="auth-form">
+                <h2>Sign Up</h2>
+                <form id="signup-form">
+                    <div class="form-group">
+                        <label for="signup-name">Full Name</label>
+                        <input type="text" id="signup-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-email">Email Address</label>
+                        <input type="email" id="signup-email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn">Create Account</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="login" class="auth-container" style="display: none;">
+            <div class="auth-form">
+                <h2>Log In</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn">Log In</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="profile-setup" class="auth-container" style="display: none;">
+            <div class="auth-form">
+                <div class="form-progress">
+                    <div class="progress-step active"></div>
+                    <div class="progress-step"></div>
+                    <div class="progress-step"></div>
+                </div>
+                <h2>Add Your Skills</h2>
+                <p style="text-align: center; margin-bottom: 1.5rem;">Enter your professional skills one at a time and
+                    click "Add"</p>
+                <form id="skills-form">
+                    <div class="form-group">
+                        <div class="input-with-button">
+                            <input type="text" id="skill-input" class="form-control"
+                                placeholder="e.g. JavaScript, Project Management">
+                            <button type="button" class="add-btn" onclick="addSkill()">Add</button>
+                        </div>
+                        <div id="skills-container" class="chips-container"></div>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="btn btn-outline" onclick="showSection('login')">Back</button>
+                        <button type="button" class="btn" onclick="saveSkillsAndNext()">Next</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Work Experience Section -->
+        <section id="work-experience" class="auth-container" style="display: none;">
+            <div class="auth-form">
+                <div class="form-progress">
+                    <div class="progress-step"></div>
+                    <div class="progress-step active"></div>
+                    <div class="progress-step"></div>
+                </div>
+                <h2>Work Experience</h2>
+                <p style="text-align: center; margin-bottom: 1.5rem;">Add your work experience</p>
+                <form id="experience-form">
+                    <div class="form-group">
+                        <label for="job-title">Job Title</label>
+                        <input type="text" id="job-title" class="form-control" placeholder="e.g. Software Engineer">
+                    </div>
+                    <div class="form-group">
+                        <label for="company">Company</label>
+                        <input type="text" id="company" class="form-control" placeholder="e.g. Tech Solutions Inc.">
+                    </div>
+                    <div class="form-group">
+                        <label for="job-duration">Duration</label>
+                        <input type="text" id="job-duration" class="form-control" placeholder="e.g. Jan 2020 - Present">
+                    </div>
+                    <button type="button" class="btn btn-outline" style="width: 100%; margin-bottom: 1rem;"
+                        onclick="addExperience()">Add Experience</button>
+
+                    <div id="experience-list" class="experience-list"></div>
+
+                    <div class="form-buttons">
+                        <button type="button" class="btn btn-outline"
+                            onclick="showSection('profile-setup')">Back</button>
+                        <button type="button" class="btn" onclick="saveExperienceAndNext()">Next</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Languages Section -->
+        <section id="languages" class="auth-container" style="display: none;">
+            <div class="auth-form">
+                <div class="form-progress">
+                    <div class="progress-step"></div>
+                    <div class="progress-step"></div>
+                    <div class="progress-step active"></div>
+                </div>
+                <h2>Languages</h2>
+                <p style="text-align: center; margin-bottom: 1.5rem;">Add languages you speak</p>
+                <form id="languages-form">
+                    <div class="form-group">
+                        <div class="input-with-button">
+                            <input type="text" id="language-input" class="form-control"
+                                placeholder="e.g. English, Spanish">
+                            <button type="button" class="add-btn" onclick="addLanguage()">Add</button>
+                        </div>
+                        <div id="languages-container" class="chips-container"></div>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="btn btn-outline"
+                            onclick="showSection('work-experience')">Back</button>
+                        <button type="button" class="btn" onclick="completeProfile()">Complete Profile</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Profile Complete -->
+        <section id="profile-complete" class="auth-container" style="display: none;">
+            <div class="auth-form" style="text-align: center;">
+                <h2>Profile Complete!</h2>
+                <div style="font-size: 4rem; margin: 2rem 0;">🎉</div>
+                <p>Your profile has been successfully created. We'll now match you with job opportunities that fit your
+                    skills and experience.</p>
+                <button class="btn" style="margin-top: 2rem;" onclick="showSection('job-matching')">View Job
+                    Matches</button>
+            </div>
+        </section>
+
+        <section class="features">
+            <h2 style="text-align: center; margin-bottom: 2rem;">How Workly Works</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">💼</div>
+                    <h3>AI-Powered Matching</h3>
+                    <p>Our advanced algorithm analyzes your skills, experience, and preferences to find the most
+                        suitable job opportunities for you.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌟</div>
+                    <h3>Inclusive Design</h3>
+                    <p>Specify accessibility needs and disabilities to find employers with accommodations that work
+                        for
+                        you.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔎</div>
+                    <h3>Professional Profile</h3>
+                    <p>Create a comprehensive profile that showcases your skills, languages, and work experience to
+                        potential employers.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-column">
+                <h3>Workly</h3>
+                <p>Finding the perfect job match with the power of AI.</p>
+            </div>
+
+            <div class="footer-column">
+                <h3>For Job Seekers</h3>
+                <ul class="footer-links">
+                    <li><a href="#">How It Works</a></li>
+                    <li><a href="#">Success Stories</a></li>
+                    <li><a href="#">Career Resources</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h3>For Employers</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Post a Job</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Talent Search</a></li>
+                    <li><a href="#">Enterprise Solutions</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h3>Contact</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Support</a></li>
+                    <li><a href="#">Feedback</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="copyright container">
+            <p>&copy; 2025 Workly. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = "http://127.0.0.1:5003";
+        let skillsArray = [];
+        let experienceArray = [];
+        let languagesArray = [];
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.auth-container').forEach(section => section.style.display = 'none');
+            document.getElementById(sectionId).style.display = 'flex';
+        }
+
+        // Skills functions
+        function addSkill() {
+            const skillInput = document.getElementById('skill-input');
+            const skill = skillInput.value.trim();
+
+            if (skill && !skillsArray.includes(skill)) {
+                skillsArray.push(skill);
+                renderSkills();
+                skillInput.value = '';
+            }
+
+            skillInput.focus();
+        }
+
+        function removeSkill(index) {
+            skillsArray.splice(index, 1);
+            renderSkills();
+        }
+
+        function renderSkills() {
+            const container = document.getElementById('skills-container');
+            container.innerHTML = '';
+
+            skillsArray.forEach((skill, index) => {
+                const chip = document.createElement('div');
+                chip.className = 'chip';
+                chip.innerHTML = `
+                    <span>${skill}</span>
+                    <button type="button" onclick="removeSkill(${index})">×</button>
+                `;
+                container.appendChild(chip);
+            });
+        }
+
+        function saveSkillsAndNext() {
+            if (skillsArray.length > 0) {
+                localStorage.setItem('skills', JSON.stringify(skillsArray));
+                showSection('work-experience');
+            } else {
+                alert('Please add at least one skill');
+            }
+        }
+
+        // Work Experience functions
+        function addExperience() {
+            const jobTitle = document.getElementById('job-title').value.trim();
+            const company = document.getElementById('company').value.trim();
+            const duration = document.getElementById('job-duration').value.trim();
+
+            if (jobTitle && company && duration) {
+                const experience = {
+                    jobTitle,
+                    company,
+                    duration
+                };
+
+                experienceArray.push(experience);
+                renderExperience();
+
+                document.getElementById('job-title').value = '';
+                document.getElementById('company').value = '';
+                document.getElementById('job-duration').value = '';
+            } else {
+                alert('Please fill in all experience fields');
+            }
+        }
+
+        function removeExperience(index) {
+            experienceArray.splice(index, 1);
+            renderExperience();
+        }
+
+        function renderExperience() {
+            const container = document.getElementById('experience-list');
+            container.innerHTML = '';
+
+            experienceArray.forEach((exp, index) => {
+                const item = document.createElement('div');
+                item.className = 'work-experience-item';
+                item.innerHTML = `
+                    <strong>${exp.jobTitle}</strong> at ${exp.company}<br>
+                    <small>${exp.duration}</small>
+                    <button type="button" 
+                            style="float: right; background: none; border: none; color: #ef4444; cursor: pointer;" 
+                            onclick="removeExperience(${index})">Remove</button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function saveExperienceAndNext() {
+            localStorage.setItem('experience', JSON.stringify(experienceArray));
+            showSection('languages');
+        }
+
+        // Languages functions
+        function addLanguage() {
+            const languageInput = document.getElementById('language-input');
+            const language = languageInput.value.trim();
+
+            if (language && !languagesArray.includes(language)) {
+                languagesArray.push(language);
+                renderLanguages();
+                languageInput.value = '';
+            }
+
+            languageInput.focus();
+        }
+
+        function removeLanguage(index) {
+            languagesArray.splice(index, 1);
+            renderLanguages();
+        }
+
+        function renderLanguages() {
+            const container = document.getElementById('languages-container');
+            container.innerHTML = '';
+
+            languagesArray.forEach((language, index) => {
+                const chip = document.createElement('div');
+                chip.className = 'chip';
+                chip.innerHTML = `
+                    <span>${language}</span>
+                    <button type="button" onclick="removeLanguage(${index})">×</button>
+                `;
+                container.appendChild(chip);
+            });
+        }
+
+        // Completed profiles
+        function completeProfile() {
+            localStorage.setItem('languages', JSON.stringify(languagesArray));
+            saveProfileToBackend()
+            showSection('profile-complete');
+        }
+
+        async function saveProfileToBackend() {
+            const user_id = localStorage.getItem("user_id");
+            if (!user_id) {
+                alert("User not found. Please log in again.");
+                showSection("login");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/profile`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        user_id,
+                        skills: skillsArray,
+                        experience: experienceArray,
+                        languages: languagesArray
+                    }),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    showSection("profile-complete");
+                } else {
+                    alert(data.error);
+                }
+            } catch (error) {
+                alert("Error saving profile.");
+                console.error("Profile Save Error:", error);
+            }
+        }
+        function showSection(sectionId) {
+            document.querySelectorAll('.auth-container').forEach(section => section.style.display = 'none');
+            document.getElementById(sectionId).style.display = 'flex';
+
+            if (sectionId === "profile-setup") {
+                skillsArray = [];
+                experienceArray = [];
+                languagesArray = [];
+                renderSkills();
+                renderExperience();
+                renderLanguages();
+            }
+        }
+
+        // Sign up 
+        document.getElementById("signup-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById("signup-name").value;
+            const email = document.getElementById("signup-email").value;
+            const password = document.getElementById("signup-password").value;
+
+            try {
+                const response = await fetch(`${API_URL}/signup`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, email, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.removeItem("skills");
+                    localStorage.removeItem("experience");
+                    localStorage.removeItem("languages");
+
+                    alert("Signup successful! Redirecting to login...");
+                    showSection("login");
+                } else if (data.redirect === "login") {
+                    alert("User already exists. Redirecting to login...");
+                    showSection("login");
+                } else {
+                    alert(data.error);
+                }
+            } catch (error) {
+                alert("Error connecting to server. Please try again.");
+                console.error("Signup Error:", error);
+            }
+        });
+
+        // Login 
+        document.getElementById("login-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById("login-email").value;
+            const password = document.getElementById("login-password").value;
+
+            try {
+                const response = await fetch(`${API_URL}/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    localStorage.setItem("token", data.token);
+                    localStorage.setItem("user_id", data.user.id);
+
+                    // Reset profile data for new login session
+                    localStorage.removeItem("skills");
+                    localStorage.removeItem("experience");
+                    localStorage.removeItem("languages");
+
+                    alert("Login successful! Redirecting to profile setup...");
+                    showSection("profile-setup");
+                } else {
+                    alert(data.error);
+                }
+            } catch (error) {
+                alert("Error connecting to server. Please try again.");
+                console.error("Login Error:", error);
+            }
+        });
+
+
+        // local storage
+        window.addEventListener('load', () => {
+            const storedSkills = localStorage.getItem('skills');
+            if (storedSkills) {
+                skillsArray = JSON.parse(storedSkills);
+                renderSkills();
+            }
+
+            const storedExperience = localStorage.getItem('experience');
+            if (storedExperience) {
+                experienceArray = JSON.parse(storedExperience);
+                renderExperience();
+            }
+
+            const storedLanguages = localStorage.getItem('languages');
+            if (storedLanguages) {
+                languagesArray = JSON.parse(storedLanguages);
+                renderLanguages();
+            }
+        });
+
+    </script>
+</body>
+
+</html>
